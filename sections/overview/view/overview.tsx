@@ -13,6 +13,7 @@ import {
   CardTitle
 } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Separator } from '@/components/ui/separator';
 
 export default function OverViewPage() {
   return (
@@ -162,6 +163,12 @@ export default function OverViewPage() {
             </div>
           </TabsContent>
         </Tabs>
+
+        <Separator className="my-6" />
+
+        <h2 className="text-2xl font-bold tracking-tight">
+          Digital Shares Concepts
+        </h2>
       </div>
     </PageContainer>
   );

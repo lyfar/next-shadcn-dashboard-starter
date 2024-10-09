@@ -1,6 +1,11 @@
 import { AreaGraph } from '../area-graph';
 import { BarGraph } from '../bar-graph';
 import { PieGraph } from '../pie-graph';
+import { DigitalSharesCard } from '../digital-shares-card';
+import { ZdoZdsConversionPanel } from '../zdo-zds-conversion-panel';
+import { ZdoZdsInfoSection } from '../zdo-zds-info-section';
+import { ConversionHistoryChart } from '../conversion-history-chart';
+import { RewardsPerformanceOverview } from '../rewards-performance-overview';
 import { CalendarDateRangePicker } from '@/components/date-range-picker';
 import PageContainer from '@/components/layout/page-container';
 import { RecentSales } from '../recent-sales';
@@ -18,7 +23,7 @@ import { Separator } from '@/components/ui/separator';
 export default function OverViewPage() {
   return (
     <PageContainer scrollable={true}>
-      <div className="space-y-2">
+      <div className="space-y-4">
         <div className="flex items-center justify-between space-y-2">
           <h2 className="text-2xl font-bold tracking-tight">
             Hi, Welcome back 👋
@@ -139,7 +144,7 @@ export default function OverViewPage() {
                 </CardContent>
               </Card>
             </div>
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-7">
+            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
               <div className="col-span-4">
                 <BarGraph />
               </div>
@@ -166,9 +171,23 @@ export default function OverViewPage() {
 
         <Separator className="my-6" />
 
-        <h2 className="text-2xl font-bold tracking-tight">
+        <h2 className="mb-4 text-2xl font-bold tracking-tight">
           Digital Shares Concepts
         </h2>
+
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+          <DigitalSharesCard />
+          <ZdoZdsConversionPanel />
+          <ZdoZdsInfoSection />
+        </div>
+
+        <div className="mt-4">
+          <ConversionHistoryChart />
+        </div>
+
+        <div className="mt-4">
+          <RewardsPerformanceOverview />
+        </div>
       </div>
     </PageContainer>
   );

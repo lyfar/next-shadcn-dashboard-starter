@@ -1,7 +1,11 @@
 import { AreaGraph } from '../area-graph';
 import { BarGraph } from '../bar-graph';
 import { PieGraph } from '../pie-graph';
-import { DigitalSharesCard } from '../digital-shares-card';
+import {
+  ZdoPointsCard,
+  ZdsCoinsCard,
+  ConversionProgressCard
+} from '../digital-shares-card';
 import { ZdoZdsConversionPanel } from '../zdo-zds-conversion-panel';
 import { ZdoZdsInfoSection } from '../zdo-zds-info-section';
 import { ConversionHistoryChart } from '../conversion-history-chart';
@@ -176,7 +180,12 @@ export default function OverViewPage() {
         </h2>
 
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-          <DigitalSharesCard />
+          <ZdoPointsCard />
+          <ZdsCoinsCard />
+          <ConversionProgressCard />
+        </div>
+
+        <div className="mt-4 grid gap-4 md:grid-cols-2">
           <ZdoZdsConversionPanel />
           <ZdoZdsInfoSection />
         </div>

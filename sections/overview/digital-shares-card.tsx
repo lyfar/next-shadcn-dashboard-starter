@@ -1,86 +1,75 @@
 'use client';
 
-import { User, Coins, Award } from 'lucide-react';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle
-} from '@/components/ui/card';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Coins, Award, ArrowRight } from 'lucide-react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger
-} from '@/components/ui/tooltip';
+import { Button } from '@/components/ui/button';
 
-export function DigitalSharesCard() {
+export function ZdoPointsCard() {
   const zdoPoints = 1500;
+
+  return (
+    <Card>
+      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+        <CardTitle className="text-sm font-medium">ZDO Points</CardTitle>
+        <Award className="h-4 w-4 text-muted-foreground" />
+      </CardHeader>
+      <CardContent>
+        <div className="text-2xl font-bold">
+          {zdoPoints.toLocaleString()} ZDO
+        </div>
+        <p className="text-xs text-muted-foreground">+20.1% from last month</p>
+      </CardContent>
+    </Card>
+  );
+}
+
+export function ZdsCoinsCard() {
   const zdsCoins = 75;
+
+  return (
+    <Card>
+      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+        <CardTitle className="text-sm font-medium">ZDS Coins</CardTitle>
+        <Coins className="h-4 w-4 text-muted-foreground" />
+      </CardHeader>
+      <CardContent>
+        <div className="text-2xl font-bold">
+          {zdsCoins.toLocaleString()} ZDS
+        </div>
+        <p className="text-xs text-muted-foreground">
+          Equivalent to ${zdsCoins}
+        </p>
+      </CardContent>
+    </Card>
+  );
+}
+
+export function ConversionProgressCard() {
   const conversionProgress = 50; // Example: 50% converted
 
   return (
-    <Card className="w-full max-w-md">
-      <CardHeader className="flex flex-row items-center justify-between">
-        <CardTitle>Quick Status Overview</CardTitle>
-        <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Avatar className="cursor-pointer">
-                <AvatarImage src="/path-to-user-image.jpg" alt="User" />
-                <AvatarFallback>
-                  <User />
-                </AvatarFallback>
-              </Avatar>
-            </TooltipTrigger>
-            <TooltipContent>
-              <p>View Profile</p>
-            </TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
+    <Card>
+      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+        <CardTitle className="text-sm font-medium">
+          Conversion Progress
+        </CardTitle>
+        <ArrowRight className="h-4 w-4 text-muted-foreground" />
       </CardHeader>
-      <CardContent className="space-y-4">
-        <div className="flex items-center justify-between">
-          <div>
-            <CardDescription>Your ZDO Points</CardDescription>
-            <CardTitle>{zdoPoints.toLocaleString()} ZDO</CardTitle>
-          </div>
-          <Award className="h-8 w-8 text-primary" />
-        </div>
-        <div className="flex items-center justify-between">
-          <div>
-            <CardDescription>Your ZDS Coins</CardDescription>
-            <CardTitle>{zdsCoins.toLocaleString()} ZDS</CardTitle>
-            <CardDescription>Equivalent to ${zdsCoins}</CardDescription>
-          </div>
-          <Coins className="h-8 w-8 text-primary" />
-        </div>
-        <div>
-          <CardDescription className="mb-2">
-            Conversion Progress
-          </CardDescription>
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Progress value={conversionProgress} className="w-full" />
-              </TooltipTrigger>
-              <TooltipContent>
-                <p>
-                  You've converted {conversionProgress}% of your ZDO into ZDS.
-                </p>
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
+      <CardContent>
+        <Progress value={conversionProgress} className="w-full" />
+        <p className="mt-2 text-xs text-muted-foreground">
+          {conversionProgress}% of ZDO converted to ZDS
+        </p>
+        <div className="mt-4 flex justify-between">
+          <Button variant="ghost" size="sm">
+            History
+          </Button>
+          <Button variant="ghost" size="sm">
+            Convert
+          </Button>
         </div>
       </CardContent>
-      <CardFooter className="justify-between">
-        <button className="text-primary hover:underline">History</button>
-        <button className="text-primary hover:underline">Convert</button>
-      </CardFooter>
     </Card>
   );
 }

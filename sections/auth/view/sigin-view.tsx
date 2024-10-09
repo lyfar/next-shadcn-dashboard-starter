@@ -45,7 +45,7 @@ export default function SignInViewPage() {
               helped me deliver stunning designs to my clients faster than ever
               before.&rdquo;
             </p>
-            <footer className="text-sm">Sofia Davis</footer>
+            <footer className="text-sm">Egor Lyfar</footer>
           </blockquote>
         </div>
       </div>

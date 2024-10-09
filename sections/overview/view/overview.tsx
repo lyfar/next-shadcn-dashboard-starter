@@ -23,11 +23,21 @@ import {
 } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Separator } from '@/components/ui/separator';
+import { WelcomeRewardsBlock } from '../welcome-rewards-block';
+import { EarnRzdsBlock } from '../earn-rzds-block';
+import { UnderstandingRzdsBlock } from '../understanding-rzds-block';
 
 export default function OverViewPage() {
   return (
     <PageContainer scrollable={true}>
       <div className="space-y-4">
+        <WelcomeRewardsBlock />
+
+        <div className="grid gap-4 md:grid-cols-2">
+          <EarnRzdsBlock />
+          <UnderstandingRzdsBlock />
+        </div>
+
         <div className="flex items-center justify-between space-y-2">
           <h2 className="text-2xl font-bold tracking-tight">
             Hi, Welcome back 👋

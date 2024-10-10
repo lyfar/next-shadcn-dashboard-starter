@@ -89,7 +89,7 @@ export function ZdoClickerGame({ onEarnZdo, initialBalance }: ZdoClickerGameProp
     const newZoomLevel = 1 + Math.min(newClickSpeed / 20, 0.2);
     setZoomLevel(newZoomLevel);
 
-    const earnedAmount = Math.ceil(level * (1 + clickSpeed / 10));
+    const earnedAmount = 1; // Fixed amount per click
     setClickCount(prev => prev + 1);
     setZdoEarned(prev => prev + earnedAmount);
     setTotalBalance(prev => prev + earnedAmount);

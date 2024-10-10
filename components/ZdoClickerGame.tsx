@@ -57,6 +57,13 @@ interface Achievement {
   category: 'clicking' | 'collection' | 'exploration' | 'special' | 'event';
 }
 
+interface FlyingPoint {
+  id: number;
+  value: number;
+  x: number;
+  y: number;
+}
+
 export function ZdoClickerGame({ onEarnZdo, initialBalance, onAchievementUnlock }: ZdoClickerGameProps) {
   const [totalZdo, setTotalZdo] = useState(initialBalance);
   const [zdoPerClick, setZdoPerClick] = useState(1);
@@ -137,6 +144,8 @@ export function ZdoClickerGame({ onEarnZdo, initialBalance, onAchievementUnlock 
     // ... (add more achievements as needed)
   ]);
 
+  const [flyingPoints, setFlyingPoints] = useState<FlyingPoint[]>([]);
+
   useEffect(() => {
     const interval = setInterval(() => {
       setTotalZdo(prev => prev + zdoPerSecond);
@@ -146,11 +155,12 @@ export function ZdoClickerGame({ onEarnZdo, initialBalance, onAchievementUnlock 
     return () => clearInterval(interval);
   }, [zdoPerSecond, onEarnZdo]);
 
-  const handleClick = () => {
-    setTotalZdo(prev => prev + zdoPerClick);
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    const earnedAmount = zdoPerClick;
+    setTotalZdo(prev => prev + earnedAmount);
     setClickCount(prev => prev + 1);
     setXp(prev => {
-      const newXp = prev + zdoPerClick;
+      const newXp = prev + earnedAmount;
       if (newXp >= level * 100) {
         setLevel(l => l + 1);
         setShowConfetti(true);
@@ -159,7 +169,18 @@ export function ZdoClickerGame({ onEarnZdo, initialBalance, onAchievementUnlock 
       }
       return newXp;
     });
-    onEarnZdo(zdoPerClick);
+    onEarnZdo(earnedAmount);
+
+    // Generate flying points
+    const rect = event.currentTarget.getBoundingClientRect();
+    const newFlyingPoints = Array.from({ length: Math.min(earnedAmount, 10) }, (_, index) => ({
+      id: Date.now() + index,
+      value: earnedAmount > 10 ? 10 : 1,
+      x: event.clientX - rect.left + (Math.random() - 0.5) * 40,
+      y: event.clientY - rect.top + (Math.random() - 0.5) * 40,
+    }));
+    setFlyingPoints(prev => [...prev, ...newFlyingPoints]);
+
     checkAchievements();
   };
 
@@ -416,21 +437,44 @@ export function ZdoClickerGame({ onEarnZdo, initialBalance, onAchievementUnlock 
             </div>
 
             {/* Main cloud button */}
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              onClick={handleClick}
-              className="w-64 h-64 mx-auto mb-6 bg-blue-500 rounded-full shadow-lg flex items-center justify-center overflow-hidden relative"
-            >
-              <Image
-                src="/cloud-g.png"
-                alt="Cloud"
-                width={200}
-                height={200}
-                className="object-cover"
-              />
-              <div className="absolute inset-0 bg-white opacity-0 hover:opacity-20 transition-opacity duration-200"></div>
-            </motion.button>
+            <div className="relative">
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={handleClick}
+                className="w-64 h-64 mx-auto mb-6 bg-blue-500 rounded-full shadow-lg flex items-center justify-center overflow-hidden relative"
+              >
+                <Image
+                  src="/cloud-g.png"
+                  alt="Cloud"
+                  width={200}
+                  height={200}
+                  className="object-cover"
+                />
+                <div className="absolute inset-0 bg-white opacity-0 hover:opacity-20 transition-opacity duration-200"></div>
+              </motion.button>
+              <AnimatePresence>
+                {flyingPoints.map((point) => (
+                  <motion.div
+                    key={point.id}
+                    initial={{ opacity: 1, scale: 0.5, x: point.x, y: point.y }}
+                    animate={{ 
+                      opacity: 0, 
+                      scale: 1.5, 
+                      y: point.y - 100,
+                      transition: { duration: 1, ease: "easeOut" }
+                    }}
+                    exit={{ opacity: 0 }}
+                    className="absolute text-2xl font-bold text-yellow-300 pointer-events-none"
+                    style={{ 
+                      textShadow: '0 0 10px rgba(255, 255, 0, 0.7), 0 0 20px rgba(255, 255, 0, 0.5), 0 0 30px rgba(255, 255, 0, 0.3)'
+                    }}
+                  >
+                    +{point.value}
+                  </motion.div>
+                ))}
+              </AnimatePresence>
+            </div>
 
             {/* Footer stats */}
             <div className="mt-auto grid grid-cols-3 gap-2 text-center">

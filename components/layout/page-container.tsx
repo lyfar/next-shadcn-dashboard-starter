@@ -48,14 +48,12 @@ export default function PageContainer({ children, scrollable = false, sidebar }:
           <aside className="h-screen relative flex items-center justify-center">
             <CloudBackground />
             <div className={styles.phoneFrame}>
-              <div className={styles.phoneContent}>
+              <div className={`${styles.phoneContent} pt-12`}>
                 <AnimatedPageTransition isVisible={currentScreen === 'lock'} key={`lock-${key}`}>
                   <PhoneLockScreen />
                 </AnimatedPageTransition>
                 <AnimatedPageTransition isVisible={currentScreen === 'content'} key={`content-${key}`}>
-                  <div className="p-4">
-                    {sidebarContent}
-                  </div>
+                  {sidebarContent}
                 </AnimatedPageTransition>
               </div>
             </div>

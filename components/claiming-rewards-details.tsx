@@ -25,10 +25,10 @@ export function ClaimingRewardsDetails({ daysLeft, rzdsAmount, onClaimClick }: C
   return (
     <div ref={containerRef} className="relative h-full w-full overflow-hidden">
       {showConfetti && <ConfettiEffect containerRef={containerRef} />}
-      <div className="space-y-6 h-full overflow-y-auto p-6 pt-12">
+      <div className="space-y-6 h-full overflow-y-auto p-6">
         <h2 className="text-2xl font-bold mb-6">Don&apos;t Miss Out on Your Rewards!</h2>
         
-        <div className="bg-secondary/10 p-6 rounded-lg">
+        <div className="bg-secondary/10 p-4 rounded-lg">
           <div className="flex items-center space-x-2 mb-4">
             <Clock className="h-5 w-5 text-primary" />
             <h3 className="font-semibold">Time Remaining</h3>
@@ -50,7 +50,7 @@ export function ClaimingRewardsDetails({ daysLeft, rzdsAmount, onClaimClick }: C
           )}
         </div>
         
-        <div className="bg-background/50 p-6 rounded-lg">
+        <div className="bg-background/50 p-4 rounded-lg">
           <div className="flex items-center space-x-2 mb-2">
             <Info className="h-5 w-5 text-primary" />
             <h3 className="font-semibold">Why Claim Regularly?</h3>

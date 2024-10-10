@@ -8,10 +8,12 @@ interface RollingNumberProps {
 }
 
 export function RollingNumber({ endValue, duration = 300 }: RollingNumberProps) {
-  const [displayValue, setDisplayValue] = useState(endValue);
-  const startValueRef = useRef(endValue);
+  const [displayValue, setDisplayValue] = useState(endValue || 0);
+  const startValueRef = useRef(endValue || 0);
 
   useEffect(() => {
+    if (endValue === undefined) return;
+
     let startTime: number;
     let animationFrame: number;
     const startValue = startValueRef.current;

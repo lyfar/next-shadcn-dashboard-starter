@@ -36,6 +36,7 @@ import { ClaimingRewardsWidget } from '@/components/claiming-rewards-widget';
 import { ClaimingRewardsDetails } from '@/components/claiming-rewards-details';
 import { ZdoClickerWidget } from '@/components/ZdoClickerWidget';
 import { ZdoClickerGame } from '@/components/ZdoClickerGame';
+import { UnderstandingZdoZdsWidget } from '@/components/UnderstandingZdoZdsWidget';
 
 export default function OverviewPageView() {
   const [sidebarContent, setSidebarContent] = useState<React.ReactNode | null>(null);
@@ -79,6 +80,7 @@ export default function OverviewPageView() {
   const handleZdoClickerPlay = () => {
     setSidebarContent(
       <ZdoClickerGame
+        initialBalance={userData.zdoBalance}
         onEarnZdo={(amount) => {
           setUserData(prev => ({
             ...prev,
@@ -87,6 +89,12 @@ export default function OverviewPageView() {
         }}
       />
     );
+  };
+
+  const handleUnderstandingZdoZdsClick = () => {
+    // Implement the logic for what happens when this widget is clicked
+    console.log("Understanding ZDO & ZDS widget clicked");
+    // You might want to set some sidebar content here
   };
 
   return (
@@ -119,7 +127,7 @@ export default function OverviewPageView() {
             onClaimClick={handleClaimRewardsClick}
           />
           <ZdoClickerWidget onPlayClick={handleZdoClickerPlay} />
-          {/* Add other widgets here if needed */}
+          <UnderstandingZdoZdsWidget onClick={handleUnderstandingZdoZdsClick} />
         </div>
 
         <div className="grid gap-4 md:grid-cols-2">

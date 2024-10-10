@@ -9,6 +9,19 @@ interface CustomCursorProps {
   containerRef: React.RefObject<HTMLDivElement>;
 }
 
+interface RenderedStyle {
+  previous: number;
+  current: number;
+  amt: number;
+}
+
+interface RenderedStyles {
+  tx: RenderedStyle;
+  ty: RenderedStyle;
+  radius: RenderedStyle;
+  opacity: RenderedStyle;
+}
+
 export function CustomCursor({ containerRef }: CustomCursorProps) {
   const cursorRef = useRef<SVGSVGElement>(null);
   const cursorInnerRef = useRef<SVGCircleElement>(null);
@@ -23,7 +36,7 @@ export function CustomCursor({ containerRef }: CustomCursorProps) {
 
     if (!cursorEl || !cursorInnerEl || !feTurbulence || !container) return;
 
-    const renderedStyles = {
+    const renderedStyles: RenderedStyles = {
       tx: { previous: 0, current: 0, amt: 0.15 },
       ty: { previous: 0, current: 0, amt: 0.15 },
       radius: { previous: 20, current: 20, amt: 0.15 },
@@ -55,11 +68,10 @@ export function CustomCursor({ containerRef }: CustomCursorProps) {
       renderedStyles.ty.current = cursor.y;
 
       for (const key in renderedStyles) {
-        renderedStyles[key].previous = lerp(
-          renderedStyles[key].previous,
-          renderedStyles[key].current,
-          renderedStyles[key].amt
-        );
+        if (key in renderedStyles) {
+          const style = renderedStyles[key as keyof RenderedStyles];
+          style.previous = lerp(style.previous, style.current, style.amt);
+        }
       }
 
       cursorEl.style.transform = `translateX(${renderedStyles.tx.previous}px) translateY(${renderedStyles.ty.previous}px)`;
@@ -92,7 +104,7 @@ export function CustomCursor({ containerRef }: CustomCursorProps) {
           <feDisplacementMap xChannelSelector="R" yChannelSelector="G" scale="20" in="SourceGraphic" in2="warpOffset" />
         </filter>
       </defs>
-      <circle ref={cursorInnerRef} className="cursor__inner" cx="40" cy="40" r="20" fill="none" stroke="currentColor" strokeWidth="2" />
+      <circle ref={cursorInnerRef} className="cursor__inner" cx="40" cy="40" r="20" fill="rgba(255,255,255,0.2)" stroke="white" strokeWidth="2" />
     </svg>
   );
 }

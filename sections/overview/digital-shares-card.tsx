@@ -14,7 +14,7 @@ export function ZdoPointsCard({ balance }: { balance: number }) {
       </CardHeader>
       <CardContent>
         <div className="text-2xl font-bold">
-          <RollingNumber endValue={balance} /> ZDO
+          <RollingNumber endValue={balance} duration={300} /> ZDO
         </div>
         <p className="text-xs text-muted-foreground">
           +20.1% from last month

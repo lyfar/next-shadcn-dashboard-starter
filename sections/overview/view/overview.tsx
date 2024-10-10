@@ -34,6 +34,8 @@ import { InfoSidebar } from '../info-sidebar';
 import { Progress } from '@/components/ui/progress';
 import { ClaimingRewardsWidget } from '@/components/claiming-rewards-widget';
 import { ClaimingRewardsDetails } from '@/components/claiming-rewards-details';
+import { ZdoClickerWidget } from '@/components/ZdoClickerWidget';
+import { ZdoClickerGame } from '@/components/ZdoClickerGame';
 
 export default function OverviewPageView() {
   const [sidebarContent, setSidebarContent] = useState<React.ReactNode | null>(null);
@@ -67,6 +69,20 @@ export default function OverviewPageView() {
             zdoBalance: prev.zdoBalance + amount,
             rzdsAmountToClaim: 0,
             daysLeftToClaim: 0,
+          }));
+          // The component will handle showing the success message and confetti
+        }}
+      />
+    );
+  };
+
+  const handleZdoClickerPlay = () => {
+    setSidebarContent(
+      <ZdoClickerGame
+        onEarnZdo={(amount) => {
+          setUserData(prev => ({
+            ...prev,
+            zdoBalance: prev.zdoBalance + amount,
           }));
         }}
       />
@@ -102,6 +118,7 @@ export default function OverviewPageView() {
             rzdsAmount={userData.rzdsAmountToClaim}
             onClaimClick={handleClaimRewardsClick}
           />
+          <ZdoClickerWidget onPlayClick={handleZdoClickerPlay} />
           {/* Add other widgets here if needed */}
         </div>
 

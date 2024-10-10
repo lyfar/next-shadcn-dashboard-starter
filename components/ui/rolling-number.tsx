@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
 interface RollingNumberProps {
   endValue: number;
@@ -8,11 +8,13 @@ interface RollingNumberProps {
 }
 
 export function RollingNumber({ endValue, duration = 2000 }: RollingNumberProps) {
-  const [displayValue, setDisplayValue] = useState(0);
+  const [displayValue, setDisplayValue] = useState(endValue);
+  const startValueRef = useRef(endValue);
 
   useEffect(() => {
     let startTime: number;
     let animationFrame: number;
+    const startValue = startValueRef.current;
 
     const animate = (timestamp: number) => {
       if (!startTime) startTime = timestamp;
@@ -20,10 +22,11 @@ export function RollingNumber({ endValue, duration = 2000 }: RollingNumberProps)
 
       if (progress < duration) {
         const percentage = progress / duration;
-        setDisplayValue(Math.floor(percentage * endValue));
+        setDisplayValue(Math.floor(startValue + (endValue - startValue) * percentage));
         animationFrame = requestAnimationFrame(animate);
       } else {
         setDisplayValue(endValue);
+        startValueRef.current = endValue;
       }
     };
 

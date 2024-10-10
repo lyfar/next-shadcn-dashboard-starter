@@ -7,7 +7,7 @@ interface RollingNumberProps {
   duration?: number;
 }
 
-export function RollingNumber({ endValue, duration = 2000 }: RollingNumberProps) {
+export function RollingNumber({ endValue, duration = 500 }: RollingNumberProps) {
   const [displayValue, setDisplayValue] = useState(endValue);
   const startValueRef = useRef(endValue);
 
@@ -15,14 +15,16 @@ export function RollingNumber({ endValue, duration = 2000 }: RollingNumberProps)
     let startTime: number;
     let animationFrame: number;
     const startValue = startValueRef.current;
+    const difference = Math.abs(endValue - startValue);
+    const actualDuration = Math.min(duration, Math.max(200, difference * 10)); // Dynamic duration
 
     const animate = (timestamp: number) => {
       if (!startTime) startTime = timestamp;
       const progress = timestamp - startTime;
 
-      if (progress < duration) {
-        const percentage = progress / duration;
-        setDisplayValue(Math.floor(startValue + (endValue - startValue) * percentage));
+      if (progress < actualDuration) {
+        const percentage = progress / actualDuration;
+        setDisplayValue(Math.round(startValue + (endValue - startValue) * percentage));
         animationFrame = requestAnimationFrame(animate);
       } else {
         setDisplayValue(endValue);

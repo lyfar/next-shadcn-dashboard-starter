@@ -403,12 +403,12 @@ export function ZdoClickerGame({ onEarnZdo, initialBalance, onAchievementUnlock 
           <>
             {/* Stats */}
             <div className="grid grid-cols-2 gap-4 mb-6">
-              <div className="bg-white/10 p-4 rounded-lg text-center">
+              <div className="bg-white/10 p-4 rounded-lg text-center backdrop-blur-md">
                 <Coins className="w-6 h-6 text-yellow-400 mx-auto mb-2" />
                 <p className="text-sm text-gray-300">Total ZDO</p>
                 <p className="text-2xl font-bold text-white"><RollingNumber endValue={totalZdo} /></p>
               </div>
-              <div className="bg-white/10 p-4 rounded-lg text-center">
+              <div className="bg-white/10 p-4 rounded-lg text-center backdrop-blur-md">
                 <Zap className="w-6 h-6 text-blue-400 mx-auto mb-2" />
                 <p className="text-sm text-gray-300">ZDO per Click</p>
                 <p className="text-2xl font-bold text-white">{zdoPerClick}</p>
@@ -420,15 +420,16 @@ export function ZdoClickerGame({ onEarnZdo, initialBalance, onAchievementUnlock 
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               onClick={handleClick}
-              className="w-40 h-40 mx-auto mb-6 bg-blue-500 rounded-full shadow-lg flex items-center justify-center overflow-hidden"
+              className="w-64 h-64 mx-auto mb-6 bg-blue-500 rounded-full shadow-lg flex items-center justify-center overflow-hidden relative"
             >
               <Image
                 src="/cloud-g.png"
                 alt="Cloud"
-                width={120}
-                height={120}
+                width={200}
+                height={200}
                 className="object-cover"
               />
+              <div className="absolute inset-0 bg-white opacity-0 hover:opacity-20 transition-opacity duration-200"></div>
             </motion.button>
 
             {/* Footer stats */}
@@ -452,78 +453,86 @@ export function ZdoClickerGame({ onEarnZdo, initialBalance, onAchievementUnlock 
   };
 
   return (
-    <div ref={gameAreaRef} className="flex flex-col h-full p-6 relative cursor-none overflow-hidden bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-700">
+    <div ref={gameAreaRef} className="flex flex-col h-full p-6 relative cursor-none overflow-hidden">
+      {/* Background with dark overlay */}
+      <div className="absolute inset-0 bg-gradient-to-br from-blue-400 to-blue-600 opacity-70"></div>
+      <div className="absolute inset-0 bg-black opacity-40"></div>
+      <div className="animated-background absolute inset-0 pointer-events-none"></div>
+      
       <CustomCursor containerRef={gameAreaRef} />
       {showConfetti && <ConfettiEffect containerRef={gameAreaRef} />}
 
-      {/* Header */}
-      <div className="text-center mb-4">
-        <h2 className="text-3xl font-bold text-white mb-2">ZDO Clicker Game</h2>
-        <p className="text-xl text-yellow-300">Tap the cloud to earn ZDO!</p>
-      </div>
+      {/* Content wrapper with z-index to appear above the background */}
+      <div className="relative z-10 flex flex-col h-full">
+        {/* Header */}
+        <div className="text-center mb-4">
+          <h2 className="text-3xl font-bold text-white mb-2 text-shadow-lg">ZDO Clicker Game</h2>
+          <p className="text-xl text-yellow-300 text-shadow-lg">Tap the cloud to earn ZDO!</p>
+        </div>
 
-      {/* Main content area */}
-      <div className="flex-grow overflow-y-auto mb-4">
-        {renderContent()}
-      </div>
+        {/* Main content area */}
+        <div className="flex-grow overflow-y-auto mb-4">
+          {renderContent()}
+        </div>
 
-      {/* Bottom navigation bar */}
-      <div className="mt-auto bg-white/10 rounded-lg p-2">
-        <div className="grid grid-cols-3 gap-2">
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => setActiveTab('main')}
-            className={`flex flex-col items-center ${activeTab === 'main' ? 'text-blue-400' : 'text-white'}`}
-          >
-            <Home className="h-5 w-5 mb-1" />
-            <span className="text-xs">Home</span>
-          </Button>
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => setActiveTab('upgrades')}
-            className={`flex flex-col items-center ${activeTab === 'upgrades' ? 'text-blue-400' : 'text-white'}`}
-          >
-            <ArrowUp className="h-5 w-5 mb-1" />
-            <span className="text-xs">Upgrades</span>
-          </Button>
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => setActiveTab('cloudKingdom')}
-            className={`flex flex-col items-center ${activeTab === 'cloudKingdom' ? 'text-blue-400' : 'text-white'}`}
-          >
-            <Cloud className="h-5 w-5 mb-1" />
-            <span className="text-xs">Kingdom</span>
-          </Button>
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => setActiveTab('skyMap')}
-            className={`flex flex-col items-center ${activeTab === 'skyMap' ? 'text-blue-400' : 'text-white'}`}
-          >
-            <Map className="h-5 w-5 mb-1" />
-            <span className="text-xs">Sky Map</span>
-          </Button>
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => setActiveTab('achievements')}
-            className={`flex flex-col items-center ${activeTab === 'achievements' ? 'text-blue-400' : 'text-white'}`}
-          >
-            <Trophy className="h-5 w-5 mb-1" />
-            <span className="text-xs">Achievements</span>
-          </Button>
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => setActiveTab('settings')}
-            className={`flex flex-col items-center ${activeTab === 'settings' ? 'text-blue-400' : 'text-white'}`}
-          >
-            <Settings className="h-5 w-5 mb-1" />
-            <span className="text-xs">Settings</span>
-          </Button>
+        {/* Bottom navigation bar */}
+        <div className="mt-auto bg-black/70 rounded-lg p-2 backdrop-blur-md">
+          <div className="grid grid-cols-3 gap-2">
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setActiveTab('main')}
+              className={`flex flex-col items-center ${activeTab === 'main' ? 'bg-blue-500 text-white' : 'text-gray-300 hover:text-white hover:bg-blue-500/50'}`}
+            >
+              <Home className="h-5 w-5 mb-1" />
+              <span className="text-xs">Home</span>
+            </Button>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setActiveTab('upgrades')}
+              className={`flex flex-col items-center ${activeTab === 'upgrades' ? 'bg-blue-500 text-white' : 'text-gray-300 hover:text-white hover:bg-blue-500/50'}`}
+            >
+              <ArrowUp className="h-5 w-5 mb-1" />
+              <span className="text-xs">Upgrades</span>
+            </Button>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setActiveTab('cloudKingdom')}
+              className={`flex flex-col items-center ${activeTab === 'cloudKingdom' ? 'bg-blue-500 text-white' : 'text-gray-300 hover:text-white hover:bg-blue-500/50'}`}
+            >
+              <Cloud className="h-5 w-5 mb-1" />
+              <span className="text-xs">Kingdom</span>
+            </Button>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setActiveTab('skyMap')}
+              className={`flex flex-col items-center ${activeTab === 'skyMap' ? 'bg-blue-500 text-white' : 'text-gray-300 hover:text-white hover:bg-blue-500/50'}`}
+            >
+              <Map className="h-5 w-5 mb-1" />
+              <span className="text-xs">Sky Map</span>
+            </Button>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setActiveTab('achievements')}
+              className={`flex flex-col items-center ${activeTab === 'achievements' ? 'bg-blue-500 text-white' : 'text-gray-300 hover:text-white hover:bg-blue-500/50'}`}
+            >
+              <Trophy className="h-5 w-5 mb-1" />
+              <span className="text-xs">Achievements</span>
+            </Button>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setActiveTab('settings')}
+              className={`flex flex-col items-center ${activeTab === 'settings' ? 'bg-blue-500 text-white' : 'text-gray-300 hover:text-white hover:bg-blue-500/50'}`}
+            >
+              <Settings className="h-5 w-5 mb-1" />
+              <span className="text-xs">Settings</span>
+            </Button>
+          </div>
         </div>
       </div>
 
@@ -531,6 +540,47 @@ export function ZdoClickerGame({ onEarnZdo, initialBalance, onAchievementUnlock 
         .cursor-none,
         .cursor-none * {
           cursor: none !important;
+        }
+
+        .text-shadow-lg {
+          text-shadow: 0 0 10px rgba(0, 0, 0, 0.5), 0 0 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .animated-background {
+          background: linear-gradient(
+            -45deg,
+            rgba(255, 255, 255, 0.1),
+            rgba(173, 216, 230, 0.1),
+            rgba(135, 206, 235, 0.1),
+            rgba(255, 255, 255, 0.1)
+          );
+          background-size: 400% 400%;
+          animation: gradient 15s ease infinite;
+        }
+
+        .animated-background::before {
+          content: '';
+          position: absolute;
+          top: -50%;
+          left: -50%;
+          right: -50%;
+          bottom: -50%;
+          width: 200%;
+          height: 200%;
+          background: url('/cloud-pattern.png') repeat;
+          animation: cloud-move 60s linear infinite;
+          opacity: 0.05;
+        }
+
+        @keyframes gradient {
+          0% { background-position: 0% 50%; }
+          50% { background-position: 100% 50%; }
+          100% { background-position: 0% 50%; }
+        }
+
+        @keyframes cloud-move {
+          0% { transform: translate(0, 0); }
+          100% { transform: translate(-50%, -50%); }
         }
       `}</style>
     </div>

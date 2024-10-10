@@ -37,6 +37,7 @@ import { ClaimingRewardsDetails } from '@/components/claiming-rewards-details';
 import { ZdoClickerWidget } from '@/components/ZdoClickerWidget';
 import { ZdoClickerGame } from '@/components/ZdoClickerGame';
 import { UnderstandingZdoZdsWidget } from '@/components/UnderstandingZdoZdsWidget';
+import { ZdoZdsStoryView } from '@/components/ZdoZdsStoryView';
 
 export default function OverviewPageView() {
   const [sidebarContent, setSidebarContent] = useState<React.ReactNode | null>(null);
@@ -92,9 +93,7 @@ export default function OverviewPageView() {
   };
 
   const handleUnderstandingZdoZdsClick = () => {
-    // Implement the logic for what happens when this widget is clicked
-    console.log("Understanding ZDO & ZDS widget clicked");
-    // You might want to set some sidebar content here
+    setSidebarContent(<ZdoZdsStoryView />);
   };
 
   return (

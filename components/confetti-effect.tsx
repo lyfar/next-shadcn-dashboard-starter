@@ -9,7 +9,6 @@ interface ConfettiEffectProps {
 
 export const ConfettiEffect: React.FC<ConfettiEffectProps> = ({ containerRef }) => {
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
-  const [isActive, setIsActive] = useState(true);
 
   useEffect(() => {
     if (containerRef.current) {
@@ -21,23 +20,18 @@ export const ConfettiEffect: React.FC<ConfettiEffectProps> = ({ containerRef }) 
       updateDimensions();
       window.addEventListener('resize', updateDimensions);
 
-      const timer = setTimeout(() => setIsActive(false), 5000);
-
       return () => {
         window.removeEventListener('resize', updateDimensions);
-        clearTimeout(timer);
       };
     }
   }, [containerRef]);
-
-  if (!isActive) return null;
 
   return (
     <ReactConfetti
       width={dimensions.width}
       height={dimensions.height}
       recycle={false}
-      numberOfPieces={200}
+      numberOfPieces={50}
       gravity={0.2}
       colors={['#1e40af', '#3b82f6', '#93c5fd', '#60a5fa', '#2563eb']}
       style={{

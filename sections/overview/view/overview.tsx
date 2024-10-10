@@ -38,6 +38,7 @@ import { ZdoClickerWidget } from '@/components/ZdoClickerWidget';
 import { ZdoClickerGame } from '@/components/ZdoClickerGame';
 import { UnderstandingZdoZdsWidget } from '@/components/UnderstandingZdoZdsWidget';
 import { ZdoZdsStoryView } from '@/components/ZdoZdsStoryView';
+import { RzdsComparisonTable } from '@/components/RzdsComparisonTable';
 
 export default function OverviewPageView() {
   const [sidebarContent, setSidebarContent] = useState<React.ReactNode | null>(null);
@@ -133,6 +134,9 @@ export default function OverviewPageView() {
           <EarnRzdsBlock />
           <UnderstandingRzdsBlock />
         </div>
+
+        {/* Add the RZDS Comparison Table here */}
+        <RzdsComparisonTable />
 
         <div className="flex items-center justify-between space-y-2">
           <h2 className="text-2xl font-bold tracking-tight">

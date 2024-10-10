@@ -3,6 +3,7 @@ import { CustomCursor } from './CustomCursor';
 import { RollingNumber } from '@/components/ui/rolling-number';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Coins, Zap, Users, Wallet } from 'lucide-react';
+import { ConfettiEffect } from './confetti-effect';
 
 interface ZdoClickerGameProps {
   onEarnZdo: (amount: number) => void;
@@ -14,6 +15,8 @@ interface FloatingPoint {
   value: number;
   x: number;
   y: number;
+  rotation: number;
+  scale: number;
 }
 
 export function ZdoClickerGame({ onEarnZdo, initialBalance }: ZdoClickerGameProps) {
@@ -22,37 +25,51 @@ export function ZdoClickerGame({ onEarnZdo, initialBalance }: ZdoClickerGameProp
   const [totalBalance, setTotalBalance] = useState(initialBalance || 0);
   const [floatingPoints, setFloatingPoints] = useState<FloatingPoint[]>([]);
   const [clickSpeed, setClickSpeed] = useState(0);
+  const [zoomLevel, setZoomLevel] = useState(1);
   const gameAreaRef = useRef<HTMLDivElement>(null);
   const lastClickTime = useRef(Date.now());
+  const [showConfetti, setShowConfetti] = useState(false);
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     const now = Date.now();
     const timeDiff = now - lastClickTime.current;
     lastClickTime.current = now;
 
-    setClickSpeed(1000 / timeDiff);
+    const newClickSpeed = 1000 / timeDiff;
+    setClickSpeed(newClickSpeed);
 
-    const earnedAmount = 1; // Fixed reward per click
+    const newZoomLevel = 1 + Math.min(newClickSpeed / 20, 0.2);
+    setZoomLevel(newZoomLevel);
+
+    const earnedAmount = 1;
     setClickCount(prev => prev + 1);
     setZdoEarned(prev => prev + earnedAmount);
     setTotalBalance(prev => prev + earnedAmount);
     onEarnZdo(earnedAmount);
 
-    const rect = event.currentTarget.getBoundingClientRect();
-    setFloatingPoints(prev => [
-      ...prev,
-      {
+    const gameAreaRect = gameAreaRef.current?.getBoundingClientRect();
+    
+    if (gameAreaRect) {
+      const newPoint: FloatingPoint = {
         id: Date.now(),
         value: earnedAmount,
-        x: event.clientX - rect.left,
-        y: event.clientY - rect.top,
-      },
-    ]);
+        x: event.clientX - gameAreaRect.left,
+        y: event.clientY - gameAreaRect.top,
+        rotation: Math.random() * 60 - 30, // Random rotation between -30 and 30 degrees
+        scale: Math.random() * 0.3 + 0.85, // Random scale between 0.85 and 1.15
+      };
+
+      setFloatingPoints(prev => [...prev, newPoint]);
+    }
+
+    setShowConfetti(true);
+    setTimeout(() => setShowConfetti(false), 200);
   };
 
   useEffect(() => {
     const interval = setInterval(() => {
       setClickSpeed(prev => Math.max(0, prev - 0.5));
+      setZoomLevel(prev => Math.max(1, prev - 0.01));
     }, 100);
 
     return () => clearInterval(interval);
@@ -61,6 +78,7 @@ export function ZdoClickerGame({ onEarnZdo, initialBalance }: ZdoClickerGameProp
   return (
     <div ref={gameAreaRef} className="flex flex-col items-center justify-between h-full p-6 relative cursor-none overflow-hidden bg-gradient-to-br from-blue-900 via-purple-900 to-pink-900">
       <CustomCursor containerRef={gameAreaRef} />
+      {showConfetti && <ConfettiEffect containerRef={gameAreaRef} />}
       
       {/* Header */}
       <div className="w-full text-center mb-8">
@@ -69,13 +87,18 @@ export function ZdoClickerGame({ onEarnZdo, initialBalance }: ZdoClickerGameProp
       </div>
 
       {/* Main game area */}
-      <div className="flex-grow flex flex-col items-center justify-center w-full">
+      <div className="flex-grow flex flex-col items-center justify-center w-full relative">
         {/* Stats */}
         <div className="grid grid-cols-2 gap-4 w-full mb-8">
           <div className="bg-white/10 p-4 rounded-lg text-center">
             <Coins className="w-8 h-8 text-yellow-400 mx-auto mb-2" />
             <p className="text-sm text-gray-300 mb-1">Total ZDO</p>
-            <p className="text-2xl font-bold text-white"><RollingNumber endValue={totalBalance} /></p>
+            <div 
+              className="text-2xl font-bold text-white transition-transform duration-200 ease-out"
+              style={{ transform: `scale(${zoomLevel})` }}
+            >
+              <RollingNumber endValue={totalBalance} />
+            </div>
           </div>
           <div className="bg-white/10 p-4 rounded-lg text-center">
             <Zap className="w-8 h-8 text-blue-400 mx-auto mb-2" />
@@ -92,22 +115,37 @@ export function ZdoClickerGame({ onEarnZdo, initialBalance }: ZdoClickerGameProp
           >
             <span className="text-3xl font-bold text-white">TAP!</span>
           </button>
-          <AnimatePresence>
-            {floatingPoints.map((point) => (
-              <motion.div
-                key={point.id}
-                initial={{ opacity: 1, y: 0 }}
-                animate={{ opacity: 0, y: -50 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 1 }}
-                className="absolute text-2xl font-bold text-yellow-300"
-                style={{ left: point.x, top: point.y }}
-              >
-                +{point.value}
-              </motion.div>
-            ))}
-          </AnimatePresence>
         </div>
+
+        {/* Floating points */}
+        <AnimatePresence>
+          {floatingPoints.map((point) => (
+            <motion.div
+              key={point.id}
+              initial={{ opacity: 1, y: 0, rotate: 0, scale: 0 }}
+              animate={{ 
+                opacity: 0, 
+                y: -50,
+                rotate: point.rotation,
+                scale: point.scale,
+                transition: { 
+                  duration: 0.6,
+                  ease: [0.32, 0.72, 0, 1],
+                }
+              }}
+              exit={{ opacity: 0 }}
+              className="absolute text-3xl font-bold text-yellow-300 pointer-events-none"
+              style={{ 
+                left: point.x, 
+                top: point.y,
+                zIndex: 20,
+                textShadow: '0 0 10px rgba(255, 255, 0, 0.7), 0 0 20px rgba(255, 255, 0, 0.5), 0 0 30px rgba(255, 255, 0, 0.3)'
+              }}
+            >
+              +{point.value}
+            </motion.div>
+          ))}
+        </AnimatePresence>
 
         {/* Click speed meter */}
         <div className="w-full h-4 bg-gray-700 rounded-full overflow-hidden mb-4">

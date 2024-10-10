@@ -24,6 +24,13 @@
     --input: 221 30% 18%;
     --ring: 221 97% 38.6%;
     --radius: 0.3rem;
+
+    /* Gradient colors */
+    --gradient-1: hsl(221, 97%, 38.6%);
+    --gradient-2: hsl(221, 80%, 50%);
+    --gradient-3: hsl(221, 70%, 60%);
+    --gradient-4: hsl(221, 60%, 70%);
+    --gradient-5: hsl(221, 50%, 80%);
   }
   .dark {
     --background: 221 50% 10%;
@@ -46,6 +53,13 @@
     --input: 221 30% 18%;
     --ring: 221 97% 38.6%;
     --radius: 0.3rem;
+
+    /* Gradient colors for dark mode */
+    --gradient-1: hsl(221, 97%, 38.6%);
+    --gradient-2: hsl(221, 80%, 30%);
+    --gradient-3: hsl(221, 70%, 25%);
+    --gradient-4: hsl(221, 60%, 20%);
+    --gradient-5: hsl(221, 50%, 15%);
   }
 }
 

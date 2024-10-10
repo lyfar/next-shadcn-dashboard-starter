@@ -69,32 +69,32 @@ export function EarnRzdsBlock() {
           Complete actions to earn up to 4,500 RZDS through initial activities
         </CardDescription>
       </CardHeader>
-      <CardContent className="space-y-6">
+      <CardContent className="space-y-4">
         {earnActions.map((action, index) => (
-          <Card key={index} className="p-4">
-            <div className="flex items-center space-x-4">
-              <div className="flex-shrink-0 text-primary">{action.icon}</div>
-              <div className="flex-grow">
+          <div key={index} className="flex items-center space-x-4 p-4 bg-secondary/10 rounded-lg">
+            <div className="flex-shrink-0 p-2 bg-primary/10 rounded-full text-primary">
+              {action.icon}
+            </div>
+            <div className="flex-grow">
+              <div className="flex justify-between items-center mb-1">
                 <h3 className="text-lg font-semibold">{action.title}</h3>
-                <p className="mb-2 text-sm text-muted-foreground">
-                  {action.description}
-                </p>
-                <div className="flex items-center justify-between">
-                  <p className="text-sm font-medium">Reward: {action.reward}</p>
-                  <Progress value={action.progress} className="w-1/3" />
-                </div>
+                <p className="text-sm font-medium text-primary">{action.reward}</p>
+              </div>
+              <p className="text-sm text-muted-foreground mb-2">
+                {action.description}
+              </p>
+              <div className="flex items-center justify-between">
+                <Progress value={action.progress} className="w-2/3" />
+                <Button
+                  variant={action.progress === 100 ? "secondary" : "default"}
+                  size="sm"
+                  disabled={action.progress === 100}
+                >
+                  {action.progress === 100 ? 'Completed' : 'Start'}
+                </Button>
               </div>
             </div>
-            <div className="mt-4 flex justify-end">
-              <Button
-                variant="outline"
-                size="sm"
-                disabled={action.progress === 100}
-              >
-                {action.progress === 100 ? 'Completed' : 'Start'}
-              </Button>
-            </div>
-          </Card>
+          </div>
         ))}
       </CardContent>
     </Card>

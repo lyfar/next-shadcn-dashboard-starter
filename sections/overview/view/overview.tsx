@@ -1,3 +1,6 @@
+'use client';
+
+import { useState } from 'react';
 import { AreaGraph } from '../area-graph';
 import { BarGraph } from '../bar-graph';
 import { PieGraph } from '../pie-graph';
@@ -26,12 +29,78 @@ import { Separator } from '@/components/ui/separator';
 import { WelcomeRewardsBlock } from '../welcome-rewards-block';
 import { EarnRzdsBlock } from '../earn-rzds-block';
 import { UnderstandingRzdsBlock } from '../understanding-rzds-block';
+import { BonusProgressWidget } from '../bonus-progress-widget';
+import { InfoSidebar } from '../info-sidebar';
+import { Progress } from '@/components/ui/progress';
+import { ClaimingRewardsWidget } from '@/components/claiming-rewards-widget';
+import { ClaimingRewardsDetails } from '@/components/claiming-rewards-details';
 
-export default function OverViewPage() {
+export default function OverviewPageView() {
+  const [sidebarContent, setSidebarContent] = useState<React.ReactNode | null>(null);
+
+  // Example data - replace with actual user data
+  const userData = {
+    lotsTradedSoFar: 30,
+    lotsRequired: 50,
+    profitEarned: 1000,
+    daysLeftToClaim: 15,
+    rzdsAmountToClaim: 9500,
+  };
+
+  const handleBonusProgressClick = () => {
+    setSidebarContent(
+      <BonusProgressWidget
+        lotsTradedSoFar={userData.lotsTradedSoFar}
+        lotsRequired={userData.lotsRequired}
+        profitEarned={userData.profitEarned}
+      />
+    );
+  };
+
+  const handleClaimRewardsClick = () => {
+    setSidebarContent(
+      <ClaimingRewardsDetails
+        daysLeft={userData.daysLeftToClaim}
+        rzdsAmount={userData.rzdsAmountToClaim}
+        onClaimClick={() => {
+          // Implement the claim logic here
+          console.log('Claiming rewards...');
+        }}
+      />
+    );
+  };
+
   return (
-    <PageContainer scrollable={true}>
-      <div className="space-y-4">
+    <PageContainer 
+      scrollable={true} 
+      sidebar={sidebarContent}
+    >
+      <div className="space-y-4 pb-6">
         <WelcomeRewardsBlock />
+
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+          <Card className="cursor-pointer" onClick={handleBonusProgressClick}>
+            <CardContent className="p-4">
+              <h3 className="font-semibold mb-2">Track Your Bonus Progress</h3>
+              <Progress value={(userData.lotsTradedSoFar / userData.lotsRequired) * 100} className="mb-2" />
+              <p className="text-sm text-muted-foreground">
+                You&apos;ve traded {userData.lotsTradedSoFar} out of {userData.lotsRequired} lots needed to unlock your RZDS bonus.
+              </p>
+              <p className="text-sm text-primary mt-2">Click for more details</p>
+            </CardContent>
+          </Card>
+          <ZdoPointsCard />
+          <ZdsCoinsCard />
+        </div>
+
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+          <ClaimingRewardsWidget
+            daysLeft={userData.daysLeftToClaim}
+            rzdsAmount={userData.rzdsAmountToClaim}
+            onClaimClick={handleClaimRewardsClick}
+          />
+          {/* Add other widgets here if needed */}
+        </div>
 
         <div className="grid gap-4 md:grid-cols-2">
           <EarnRzdsBlock />
@@ -190,9 +259,8 @@ export default function OverViewPage() {
         </h2>
 
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-          <ZdoPointsCard />
-          <ZdsCoinsCard />
           <ConversionProgressCard />
+          {/* You can add more cards here if needed */}
         </div>
 
         <div className="mt-4 grid gap-4 md:grid-cols-2">

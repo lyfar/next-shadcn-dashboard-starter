@@ -1,0 +1,15 @@
+.sidebarContainer {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(45deg, var(--gradient-1), var(--gradient-2), var(--gradient-3), var(--gradient-4), var(--gradient-5));
+  background-size: 400% 400%;
+  animation: gradientShift 15s ease infinite;
+  overflow-y: auto;
+  padding: 20px;
+}
+
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}

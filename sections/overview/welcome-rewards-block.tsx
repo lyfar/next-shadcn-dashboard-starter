@@ -38,22 +38,9 @@ export function WelcomeRewardsBlock() {
               RZDS collectively!"
             </p>
           </div>
-          <div className="flex flex-1 justify-center">
-            <Image
-              src="/images/rewards-graphic.png"
-              alt="ZFX Rewards Program"
-              width={300}
-              height={200}
-              className="rounded-lg shadow-lg"
-            />
-          </div>
+          
         </div>
       </CardContent>
-      <CardFooter className="bg-gray-100 p-6">
-        <Button variant="default" size="lg" className="w-full md:w-auto">
-          Learn How to Maximize Your Rewards
-        </Button>
-      </CardFooter>
     </Card>
   );
 }

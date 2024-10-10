@@ -7,7 +7,7 @@ import { Clouds, Cloud, CameraControls, Sky as SkyImpl } from "@react-three/drei
 
 function Sky() {
   const ref = useRef<THREE.Group>(null);
-  const cloud0 = useRef<THREE.Mesh>(null);
+  const cloud0 = useRef<THREE.Group>(null);
   const [opacity, setOpacity] = useState(0);
   const { scene } = useThree();
 

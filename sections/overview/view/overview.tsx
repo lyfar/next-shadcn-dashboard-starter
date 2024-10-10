@@ -79,6 +79,11 @@ export default function OverviewPageView() {
     );
   };
 
+  const handleAchievementUnlock = (achievement: { id: string; name: string }) => {
+    const event = new CustomEvent('achievementUnlock', { detail: { achievement } });
+    window.dispatchEvent(event);
+  };
+
   const handleZdoClickerPlay = () => {
     setSidebarContent(
       <ZdoClickerGame
@@ -89,6 +94,7 @@ export default function OverviewPageView() {
             zdoBalance: prev.zdoBalance + amount,
           }));
         }}
+        onAchievementUnlock={handleAchievementUnlock}
       />
     );
   };

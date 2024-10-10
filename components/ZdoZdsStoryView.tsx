@@ -66,7 +66,12 @@ function TopNavbar() {
   );
 }
 
-function FooterLeft({ title, content }) {
+interface FooterLeftProps {
+  title: string;
+  content: string;
+}
+
+function FooterLeft({ title, content }: FooterLeftProps) {
   return (
     <div className="absolute bottom-20 left-4 text-white">
       <h3 className="text-lg font-bold">{title}</h3>
@@ -75,7 +80,13 @@ function FooterLeft({ title, content }) {
   );
 }
 
-function FooterRight({ likes, comments, shares }) {
+interface FooterRightProps {
+  likes: number;
+  comments: number;
+  shares: number;
+}
+
+function FooterRight({ likes, comments, shares }: FooterRightProps) {
   return (
     <div className="absolute bottom-20 right-4 flex flex-col items-center space-y-4">
       <div className="flex flex-col items-center">

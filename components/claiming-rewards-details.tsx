@@ -1,17 +1,30 @@
-import React from 'react';
+import React, { useState, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Clock, AlertCircle, Info } from 'lucide-react';
+import { ConfettiEffect } from './confetti-effect';
 
 interface ClaimingRewardsDetailsProps {
   daysLeft: number;
   rzdsAmount: number;
-  onClaimClick: () => void;
+  onClaimClick: (amount: number) => void;
 }
 
 export function ClaimingRewardsDetails({ daysLeft, rzdsAmount, onClaimClick }: ClaimingRewardsDetailsProps) {
+  const [claimed, setClaimed] = useState(false);
+  const [showConfetti, setShowConfetti] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  const handleClaim = () => {
+    onClaimClick(rzdsAmount);
+    setClaimed(true);
+    setShowConfetti(true);
+    setTimeout(() => setShowConfetti(false), 5000); // Match the duration in ConfettiEffect
+  };
+
   return (
-    <div className="space-y-6">
+    <div ref={containerRef} className="space-y-6 relative h-full">
+      {showConfetti && <ConfettiEffect containerRef={containerRef} />}
       <h2 className="text-2xl font-bold">Don&apos;t Miss Out on Your Rewards!</h2>
       
       <div className="bg-secondary/10 p-4 rounded-lg">
@@ -19,15 +32,21 @@ export function ClaimingRewardsDetails({ daysLeft, rzdsAmount, onClaimClick }: C
           <Clock className="h-5 w-5 text-primary" />
           <h3 className="font-semibold">Time Remaining</h3>
         </div>
-        <p className="text-3xl font-bold text-primary mb-2">{daysLeft} days left</p>
-        <p className="text-sm text-muted-foreground mb-4">to claim {rzdsAmount.toLocaleString()} RZDS</p>
-        
-        <div className="flex items-start space-x-2 mb-4">
-          <AlertCircle className="h-5 w-5 text-yellow-500 flex-shrink-0 mt-0.5" />
-          <p className="text-sm">RZDS expire 30 days after being earned. Don&apos;t let them go to waste!</p>
-        </div>
-        
-        <Button onClick={onClaimClick} className="w-full mb-4">Claim My Rewards</Button>
+        {!claimed ? (
+          <>
+            <p className="text-3xl font-bold text-primary mb-2">{daysLeft} days left</p>
+            <p className="text-sm text-muted-foreground mb-4">to claim {rzdsAmount.toLocaleString()} RZDS</p>
+            
+            <div className="flex items-start space-x-2 mb-4">
+              <AlertCircle className="h-5 w-5 text-yellow-500 flex-shrink-0 mt-0.5" />
+              <p className="text-sm">RZDS expire 30 days after being earned. Don&apos;t let them go to waste!</p>
+            </div>
+            
+            <Button onClick={handleClaim} className="w-full mb-4">Claim My Rewards</Button>
+          </>
+        ) : (
+          <p className="text-lg font-semibold text-primary mb-4">Congratulations! You&apos;ve claimed {rzdsAmount.toLocaleString()} RZDS.</p>
+        )}
       </div>
       
       <div className="bg-background/50 p-4 rounded-lg">

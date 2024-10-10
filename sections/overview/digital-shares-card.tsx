@@ -6,7 +6,7 @@ import { Progress } from '@/components/ui/progress';
 import { Button } from '@/components/ui/button';
 import { RollingNumber } from '@/components/ui/rolling-number';
 
-export function ZdoPointsCard() {
+export function ZdoPointsCard({ balance }: { balance: number }) {
   return (
     <Card>
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -14,7 +14,7 @@ export function ZdoPointsCard() {
       </CardHeader>
       <CardContent>
         <div className="text-2xl font-bold">
-          <RollingNumber endValue={1500} duration={2000} /> ZDO
+          <RollingNumber endValue={balance} duration={2000} /> ZDO
         </div>
         <p className="text-xs text-muted-foreground">
           +20.1% from last month

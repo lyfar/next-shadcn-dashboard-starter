@@ -37,15 +37,14 @@ import { ClaimingRewardsDetails } from '@/components/claiming-rewards-details';
 
 export default function OverviewPageView() {
   const [sidebarContent, setSidebarContent] = useState<React.ReactNode | null>(null);
-
-  // Example data - replace with actual user data
-  const userData = {
+  const [userData, setUserData] = useState({
     lotsTradedSoFar: 30,
     lotsRequired: 50,
     profitEarned: 1000,
     daysLeftToClaim: 15,
     rzdsAmountToClaim: 9500,
-  };
+    zdoBalance: 1500,
+  });
 
   const handleBonusProgressClick = () => {
     setSidebarContent(
@@ -62,9 +61,13 @@ export default function OverviewPageView() {
       <ClaimingRewardsDetails
         daysLeft={userData.daysLeftToClaim}
         rzdsAmount={userData.rzdsAmountToClaim}
-        onClaimClick={() => {
-          // Implement the claim logic here
-          console.log('Claiming rewards...');
+        onClaimClick={(amount) => {
+          setUserData(prev => ({
+            ...prev,
+            zdoBalance: prev.zdoBalance + amount,
+            rzdsAmountToClaim: 0,
+            daysLeftToClaim: 0,
+          }));
         }}
       />
     );
@@ -89,7 +92,7 @@ export default function OverviewPageView() {
               <p className="text-sm text-primary mt-2">Click for more details</p>
             </CardContent>
           </Card>
-          <ZdoPointsCard />
+          <ZdoPointsCard balance={userData.zdoBalance} />
           <ZdsCoinsCard />
         </div>
 

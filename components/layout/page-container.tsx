@@ -1,6 +1,6 @@
 'use client';
 
-import React, { ReactNode, useState } from 'react';
+import React, { ReactNode } from 'react';
 import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from '@/components/ui/resizable';
 import styles from './page-container.module.css';
 
@@ -11,8 +11,6 @@ type PageContainerProps = {
 };
 
 export default function PageContainer({ children, scrollable = false, sidebar }: PageContainerProps) {
-  const [sidebarSize, setSidebarSize] = useState(25);
-
   return (
     <div className="h-screen overflow-hidden">
       <ResizablePanelGroup direction="horizontal">
@@ -29,8 +27,7 @@ export default function PageContainer({ children, scrollable = false, sidebar }:
             <ResizablePanel 
               defaultSize={25} 
               minSize={20} 
-              maxSize={40} 
-              onResize={setSidebarSize}
+              maxSize={40}
             >
               <aside className={`h-screen ${styles.sidebarGradient} flex items-center justify-center`}>
                 <div className={styles.phoneFrame}>

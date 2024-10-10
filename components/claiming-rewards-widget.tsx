@@ -1,6 +1,5 @@
 import React from 'react';
 import { Card, CardContent } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
 import { AlertCircle } from 'lucide-react';
 
 interface ClaimingRewardsWidgetProps {
@@ -21,7 +20,7 @@ export function ClaimingRewardsWidget({ daysLeft, rzdsAmount, onClaimClick }: Cl
           You have <span className="font-bold text-primary">{daysLeft} days</span> left to claim{' '}
           <span className="font-bold text-primary">{rzdsAmount.toLocaleString()} RZDS</span>.
         </p>
-        <p className="text-xs text-muted-foreground">Don't let them expire—claim now!</p>
+        <p className="text-xs text-muted-foreground">Don&apos;t let them expire—claim now!</p>
       </CardContent>
     </Card>
   );

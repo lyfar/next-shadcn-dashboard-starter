@@ -39,6 +39,8 @@ import { ZdoClickerGame } from '@/components/ZdoClickerGame';
 import { UnderstandingZdoZdsWidget } from '@/components/UnderstandingZdoZdsWidget';
 import { ZdoZdsStoryView } from '@/components/ZdoZdsStoryView';
 import { RzdsComparisonTable } from '@/components/RzdsComparisonTable';
+import { EarningZduAccordion } from '@/components/EarningZduAccordion';
+import { IBRewardsSection } from '@/components/IBRewardsSection';
 
 export default function OverviewPageView() {
   const [sidebarContent, setSidebarContent] = useState<React.ReactNode | null>(null);
@@ -111,7 +113,7 @@ export default function OverviewPageView() {
       <div className="space-y-4 pb-6">
         <WelcomeRewardsBlock />
 
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-2">
           <Card className="cursor-pointer" onClick={handleBonusProgressClick}>
             <CardContent className="p-4">
               <h3 className="font-semibold mb-2">Track Your Bonus Progress</h3>
@@ -123,7 +125,6 @@ export default function OverviewPageView() {
             </CardContent>
           </Card>
           <ZdoPointsCard balance={userData.zdoBalance} />
-          <ZdsCoinsCard />
         </div>
 
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
@@ -141,8 +142,20 @@ export default function OverviewPageView() {
           <UnderstandingRzdsBlock />
         </div>
 
-        {/* Add the RZDS Comparison Table here */}
+        {/* Add the IB Rewards Section here, right after UnderstandingRzdsBlock */}
+        <IBRewardsSection />
+
         <RzdsComparisonTable />
+
+        <Card>
+          <CardHeader>
+            <CardTitle>Earning ZDU</CardTitle>
+            <CardDescription>Learn how you can earn ZDU through various activities</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <EarningZduAccordion />
+          </CardContent>
+        </Card>
 
         <div className="flex items-center justify-between space-y-2">
           <h2 className="text-2xl font-bold tracking-tight">
@@ -312,6 +325,9 @@ export default function OverviewPageView() {
         <div className="mt-4">
           <RewardsPerformanceOverview />
         </div>
+
+        {/* Add the IB Rewards Section here */}
+        <IBRewardsSection />
       </div>
     </PageContainer>
   );

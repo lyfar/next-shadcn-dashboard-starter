@@ -6,6 +6,7 @@ import styles from './page-container.module.css';
 import { CloudBackground } from '../CloudBackground';
 import { PhoneLockScreen } from '../PhoneLockScreen';
 import { AnimatedPageTransition } from '../AnimatedPageTransition';
+import { AnnouncementBanner } from '../AnnouncementBanner';
 
 type PageContainerProps = {
   children: ReactNode;
@@ -17,6 +18,7 @@ export default function PageContainer({ children, scrollable = false, sidebar }:
   const [currentScreen, setCurrentScreen] = useState<'lock' | 'content'>('lock');
   const [sidebarContent, setSidebarContent] = useState<ReactNode>(null);
   const [key, setKey] = useState(0);
+  const [showBanner, setShowBanner] = useState(true);
 
   useEffect(() => {
     if (sidebar) {
@@ -29,12 +31,29 @@ export default function PageContainer({ children, scrollable = false, sidebar }:
     }
   }, [sidebar]);
 
+  const handleDismissBanner = () => {
+    setShowBanner(false);
+  };
+
+  const handleLearnMore = () => {
+    // Implement learn more functionality
+    console.log('Learn More clicked');
+  };
+
   return (
     <div className="h-screen overflow-hidden">
       <ResizablePanelGroup direction="horizontal">
         <ResizablePanel defaultSize={75} minSize={60}>
-          <main className={`h-screen ${scrollable ? 'overflow-y-auto' : ''}`}>
-            <div className="p-6">
+          <main className={`h-screen flex flex-col ${scrollable ? 'overflow-y-auto' : ''}`}>
+            {showBanner && (
+              <div className="flex-shrink-0 p-2">
+                <AnnouncementBanner 
+                  onDismiss={handleDismissBanner} 
+                  onLearnMore={handleLearnMore} 
+                />
+              </div>
+            )}
+            <div className={`flex-grow p-4 ${showBanner ? 'pt-2' : ''}`}>
               {children}
             </div>
           </main>

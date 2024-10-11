@@ -1,3 +1,4 @@
+import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -7,7 +8,18 @@ import {
   CardTitle
 } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
-import { Gift, ShieldCheck, Wallet, BarChart2, Percent } from 'lucide-react';
+import { Gift, ShieldCheck, Wallet, BarChart2, Percent, RefreshCw } from 'lucide-react';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Label } from "@/components/ui/label";
 
 type EarnAction = {
   icon: React.ReactNode;
@@ -58,7 +70,67 @@ const earnActions: EarnAction[] = [
   }
 ];
 
+type ConversionStep = 'method' | 'details' | 'complete';
+
 export function EarnRzdsBlock() {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [currentStep, setCurrentStep] = useState<ConversionStep>('method');
+  const [conversionMethod, setConversionMethod] = useState<string | null>(null);
+
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setCurrentStep('method');
+    setConversionMethod(null);
+  };
+
+  const nextStep = () => {
+    if (currentStep === 'method') setCurrentStep('details');
+    else if (currentStep === 'details') setCurrentStep('complete');
+  };
+
+  const prevStep = () => {
+    if (currentStep === 'details') setCurrentStep('method');
+    else if (currentStep === 'complete') setCurrentStep('details');
+  };
+
+  const renderStepContent = () => {
+    switch (currentStep) {
+      case 'method':
+        return (
+          <RadioGroup onValueChange={setConversionMethod} value={conversionMethod || undefined}>
+            <div className="flex items-center space-x-2">
+              <RadioGroupItem value="trading" id="trading" />
+              <Label htmlFor="trading">Trading Income</Label>
+            </div>
+            <div className="flex items-center space-x-2">
+              <RadioGroupItem value="interest" id="interest" />
+              <Label htmlFor="interest">Interest Income</Label>
+            </div>
+            <div className="flex items-center space-x-2">
+              <RadioGroupItem value="profit" id="profit" />
+              <Label htmlFor="profit">Profit Income</Label>
+            </div>
+          </RadioGroup>
+        );
+      case 'details':
+        return (
+          <div>
+            <p>Eligible amount: 1000 ZDU</p>
+            <p>Conversion rate: 1 ZDU = 1 ZDS</p>
+            <p>You will receive: 1000 ZDS</p>
+          </div>
+        );
+      case 'complete':
+        return (
+          <div>
+            <p>Conversion successful!</p>
+            <p>Your new ZDS balance: 1000 ZDS</p>
+          </div>
+        );
+    }
+  };
+
   return (
     <Card className="h-full w-full">
       <CardHeader>
@@ -96,6 +168,45 @@ export function EarnRzdsBlock() {
             </div>
           </div>
         ))}
+
+        {/* New section for ZDU to ZDS conversion */}
+        <div className="flex items-center space-x-4 p-4 bg-secondary/10 rounded-lg">
+          <div className="flex-shrink-0 p-2 bg-primary/10 rounded-full text-primary">
+            <RefreshCw className="h-6 w-6" />
+          </div>
+          <div className="flex-grow">
+            <div className="flex justify-between items-center mb-1">
+              <h3 className="text-lg font-semibold">Convert ZDU to ZDS</h3>
+            </div>
+            <p className="text-sm text-muted-foreground mb-2">
+              Convert your earned ZDU into valuable ZDS tokens.
+            </p>
+            <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
+              <DialogTrigger asChild>
+                <Button variant="default" size="sm" onClick={openModal}>
+                  Start Conversion
+                </Button>
+              </DialogTrigger>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle>Convert ZDU to ZDS</DialogTitle>
+                  <DialogDescription>
+                    Follow the steps to convert your ZDU into ZDS tokens.
+                  </DialogDescription>
+                </DialogHeader>
+                {renderStepContent()}
+                <DialogFooter>
+                  {currentStep !== 'method' && (
+                    <Button variant="outline" onClick={prevStep}>Back</Button>
+                  )}
+                  <Button onClick={currentStep === 'complete' ? closeModal : nextStep}>
+                    {currentStep === 'complete' ? 'Close' : 'Next'}
+                  </Button>
+                </DialogFooter>
+              </DialogContent>
+            </Dialog>
+          </div>
+        </div>
       </CardContent>
     </Card>
   );
